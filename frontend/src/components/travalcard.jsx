@@ -18,7 +18,9 @@ return (
 <div className="col-md-3">
 <p>{travel.date}</p>
 </div>
-
+<p>
+🕒 {travel.departure_time} → {travel.arrival_time}
+</p>
 <div className="col-md-3">
 <h5>₹{travel.price}</h5>
 </div>

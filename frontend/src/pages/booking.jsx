@@ -6,120 +6,220 @@ function Booking() {
 const location = useLocation();
 const navigate = useNavigate();
 
-const travel = location.state;
+const travel = location.state || {};
+
+// ✅ passengers state FIXED
+const [passengers, setPassengers] = useState([
+{ passenger_name: "", age: "" }
+]);
 
 const [formData, setFormData] = useState({
-  name: "",
-  email: "",
-  phone: ""
+name: "",
+email: "",
+from: travel?.from || "",
+to: travel?.to || "",
+type: travel?.type || "",
+price: travel?.price || "",
+date: travel?.date || "",
+departure_time: travel?.departure_time || "",
+arrival_time: travel?.arrival_time || ""
 });
 
-// If user comes directly without selecting travel
-if (!travel) {
-  return (
-    <div className="container mt-5 text-center">
-      <h3>No Travel Selected</h3>
-    </div>
-  );
-}
-
-// Handle input change
+// handle input
 const handleChange = (e) => {
-  setFormData({
-    ...formData,
-    [e.target.name]: e.target.value
-  });
+setFormData({
+...formData,
+[e.target.name]: e.target.value
+});
 };
 
-// Handle booking submit
-const handleSubmit = (e) => {
-  e.preventDefault();
+// passenger change
+const handlePassengerChange = (index, e) => {
+const updated = [...passengers];
+updated[index][e.target.name] = e.target.value;
+setPassengers(updated);
+};
 
-  const booking = {
-    ...formData,
-    travel: travel
-  };
+// add passenger
+const addPassenger = () => {
+setPassengers([
+...passengers,
+{ passenger_name: "", age: "" }
+]);
+};
 
-  // Get existing bookings
-  const existingBookings =
-    JSON.parse(localStorage.getItem("bookings")) || [];
+// submit booking
+const createBooking = () => {
 
-  // Add new booking
-  existingBookings.push(booking);
+const bookingData = {
+name: formData.name,
+email: formData.email,
 
-  // Save to localStorage
-  localStorage.setItem(
-    "bookings",
-    JSON.stringify(existingBookings)
-  );
+from_location: formData.from,
+to_location: formData.to,
 
-  alert("Booking Confirmed!");
+departure_time: formData.departure_time,
+arrival_time: formData.arrival_time,
 
-  // Redirect to MyBookings page
-  navigate("/mybookings");
+price: formData.price,
+date: formData.date,
+
+total_passengers: passengers.length,
+
+passengers: passengers
+};
+
+fetch("http://127.0.0.1:8000/api/bookings/", {
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify(bookingData)
+})
+.then(res => res.json())
+.then(data => {
+console.log(data);
+navigate("/mybookings");
+});
+
 };
 
 return (
-<div className="container mt-5">
 
-<h2>Confirm Booking</h2>
+<div className="container py-5">
 
-<div className="card shadow p-3 mt-3">
+<div className="row justify-content-center">
+<div className="col-lg-7">
 
-<h5>
-{travel.from} → {travel.to}
-</h5>
+<div className="card border-0 shadow-lg rounded-4 p-4">
 
-<p>Date: {travel.date}</p>
+<h3 className="text-center mb-4 fw-bold">
+🎫 Confirm Booking
+</h3>
 
-<h4 className="text-success">
-₹{travel.price}
-</h4>
+{/* USER INFO */}
+<div className="row g-3 mb-3">
 
-</div>
-
-<form onSubmit={handleSubmit} className="mt-4">
-
-<div className="mb-3">
+<div className="col-md-6">
 <input
 type="text"
 name="name"
-placeholder="Passenger Name"
-className="form-control"
-required
+placeholder="Full Name"
+className="form-control form-control-lg"
 onChange={handleChange}
 />
 </div>
 
-<div className="mb-3">
+<div className="col-md-6">
 <input
 type="email"
 name="email"
 placeholder="Email"
-className="form-control"
-required
+className="form-control form-control-lg"
 onChange={handleChange}
 />
 </div>
 
-<div className="mb-3">
+</div>
+
+{/* TRAVEL INFO */}
+<div className="p-3 bg-light rounded-3 mb-3">
+
+<div className="d-flex justify-content-between">
+<h6 className="fw-bold">{formData.from}</h6>
+<h6>→</h6>
+<h6 className="fw-bold">{formData.to}</h6>
+</div>
+
+<p className="text-muted mb-1">
+🕒 {formData.departure_time} → {formData.arrival_time}
+</p>
+
+<p className="text-muted mb-0">
+💰 ₹{formData.price}
+</p>
+
+</div>
+
+{/* DATE + PASSENGERS */}
+<div className="row g-3 mb-3">
+
+<div className="col-md-6">
+<input
+type="date"
+name="date"
+className="form-control form-control-lg"
+onChange={handleChange}
+/>
+</div>
+
+<div className="col-md-6">
+<input
+type="number"
+name="total_passengers"
+placeholder="Passengers"
+className="form-control form-control-lg"
+onChange={handleChange}
+/>
+</div>
+
+</div>
+
+{/* PASSENGERS */}
+<h5 className="fw-bold">👥 Passengers</h5>
+
+{passengers.map((p, index) => (
+<div key={index} className="card p-3 mb-2 shadow-sm border-0">
+
+<div className="row g-2">
+
+<div className="col-md-8">
 <input
 type="text"
-name="phone"
-placeholder="Phone Number"
+name="passenger_name"
+placeholder="Passenger Name"
 className="form-control"
-required
-onChange={handleChange}
+onChange={(e) => handlePassengerChange(index, e)}
 />
 </div>
 
-<button className="btn btn-success">
+<div className="col-md-4">
+<input
+type="number"
+name="age"
+placeholder="Age"
+className="form-control"
+onChange={(e) => handlePassengerChange(index, e)}
+/>
+</div>
+
+</div>
+
+</div>
+))}
+
+<button
+className="btn btn-outline-primary w-100 mb-3"
+onClick={addPassenger}
+>
++ Add Passenger
+</button>
+
+{/* SUBMIT */}
+<button
+className="btn btn-success w-100 fw-bold"
+onClick={createBooking}
+>
 Confirm Booking
 </button>
 
-</form>
+</div>
 
 </div>
+</div>
+
+</div>
+
 );
 }
 
