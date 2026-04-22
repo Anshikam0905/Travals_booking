@@ -5,146 +5,198 @@ function Ticket() {
 const location = useLocation();
 const navigate = useNavigate();
 
-const booking = location.state;
-
-if (!booking) {
-return (
-<div className="container mt-5 text-center">
-<h4>No Ticket Found</h4>
-<button 
-className="btn btn-primary mt-3"
-onClick={() => navigate("/mybookings")}
->
-Go Back
-</button>
-</div>
-);
-}
+const booking = location.state || {};
 
 return (
 
 <div className="container py-5">
 
+<div className="row justify-content-center">
+<div className="col-lg-8">
+
 <div className="card shadow-lg border-0 rounded-4">
 
-{/* HEADER */}
-<div className="card-header bg-primary text-white text-center rounded-top-4">
-<h3>🎫 Travel Ticket</h3>
+<div className="card-header bg-primary text-white text-center">
+<h4 className="mb-0">🎫 Booking Ticket</h4>
 </div>
 
-<div className="card-body p-4">
+<div className="card-body">
 
-{/* ROUTE */}
-<div className="d-flex justify-content-between mb-3">
+{/* USER DETAILS */}
+<h5 className="fw-bold mb-3">👤 Passenger Info</h5>
 
-<div>
-<h5>{booking.from_location}</h5>
-<p className="text-muted">Departure</p>
-</div>
-
-<div className="align-self-center">
-➡️
-</div>
-
-<div className="text-end">
-<h5>{booking.to_location}</h5>
-<p className="text-muted">Arrival</p>
-</div>
-
-</div>
-
-<hr />
-
-{/* TIME */}
 <div className="row mb-3">
 
 <div className="col-md-6">
-<p><strong>Departure:</strong> {booking.departure_time}</p>
+<p><strong>Name:</strong> {booking.name}</p>
 </div>
 
 <div className="col-md-6">
-<p><strong>Arrival:</strong> {booking.arrival_time}</p>
+<p><strong>Email:</strong> {booking.email}</p>
 </div>
 
 </div>
 
-{/* DATE & PRICE */}
-<div className="row mb-3">
+
+<hr/>
+
+
+{/* TRAVEL DETAILS */}
+<h5 className="fw-bold mb-3">🚆 Travel Details</h5>
+
+<div className="row">
 
 <div className="col-md-6">
-<p><strong>Date:</strong> {booking.date}</p>
+<p>
+<strong>From:</strong> {booking.from_location}
+</p>
+
+<p>
+<strong>To:</strong> {booking.to_location}
+</p>
+
+<p>
+<strong>Date:</strong> {booking.date}
+</p>
+
 </div>
 
 <div className="col-md-6">
-<p><strong>Price:</strong> ₹{booking.price}</p>
+
+<p>
+<strong>Departure:</strong> {booking.departure_time}
+</p>
+
+<p>
+<strong>Arrival:</strong> {booking.arrival_time}
+</p>
+
+<p>
+<strong>Total Passengers:</strong> {booking.total_passengers}
+</p>
+
+</div>
+
+</div>
+
+
+<hr/>
+
+
+{/* TRANSPORT */}
+<h5 className="fw-bold mb-3">🚍 Transport Info</h5>
+
+<div className="row">
+
+<div className="col-md-6">
+<p>
+<strong>Transport Name:</strong> {booking.transport_name}
+</p>
+</div>
+
+<div className="col-md-6">
+<p>
+<strong>Transport ID:</strong> {booking.transport_id}
+</p>
 </div>
 
 </div>
 
-<hr />
+
+<hr/>
+
+
+{/* PAYMENT */}
+<h5 className="fw-bold mb-3">💳 Payment Details</h5>
+
+<div className="row">
+
+<div className="col-md-6">
+<p>
+<strong>Payment Type:</strong> {booking.payment_type}
+</p>
+</div>
+
+<div className="col-md-6">
+<p>
+<strong>Payment ID:</strong> {booking.payment_id}
+</p>
+</div>
+
+</div>
+
+
+<hr/>
+
 
 {/* PASSENGERS */}
-<h5 className="mb-3">👥 Passenger Details</h5>
+<h5 className="fw-bold mb-3">👥 Passenger List</h5>
 
-{booking.passengers?.map((p, index) => (
+{
+booking.passengers?.map((p, index) => (
 
-<div 
-key={index} 
-className="border rounded p-3 mb-2"
->
+<div key={index} className="card p-2 mb-2 bg-light">
 
 <div className="row">
 
 <div className="col-md-4">
-<strong>Name</strong>
-<p>{p.passenger_name}</p>
+<strong>Name:</strong> {p.passenger_name}
 </div>
 
 <div className="col-md-4">
-<strong>Age</strong>
-<p>{p.age}</p>
+<strong>Age:</strong> {p.age}
 </div>
 
 <div className="col-md-4">
-<strong>Seat</strong>
-<p>{p.seat_number}</p>
+<strong>Seat:</strong> {p.seat_number}
 </div>
 
 </div>
 
 </div>
 
-))}
+))
+}
 
-<hr />
 
-{/* USER DETAILS */}
-<h6>User Info</h6>
+<hr/>
 
-<p><strong>Name:</strong> {booking.name}</p>
-<p><strong>Email:</strong> {booking.email}</p>
+
+{/* PRICE */}
+<div className="text-center">
+
+<h4 className="fw-bold text-success">
+Total Price : ₹{booking.price}
+</h4>
 
 </div>
 
-{/* FOOTER */}
-<div className="card-footer text-center">
 
-<button 
-className="btn btn-success me-2"
+{/* BUTTONS */}
+<div className="text-center mt-4">
+
+<button
+className="btn btn-outline-primary me-2"
 onClick={() => window.print()}
 >
-⬇️ Download Ticket
+🖨️ Print Ticket
 </button>
 
-<button 
-className="btn btn-secondary"
+<button
+className="btn btn-success"
 onClick={() => navigate("/mybookings")}
 >
-Back
+Back to My Bookings
 </button>
 
 </div>
 
+
+</div>
+
+</div>
+
+</div>
 </div>
 
 </div>

@@ -1,10 +1,7 @@
-from django.contrib import admin
 from django.urls import path
-from .views import *
+from . import views
 
 urlpatterns = [
-    #  path('bookings/', get_bookings),
-    #  path('bookings/create/',create_booking),
-    #  path('bookings/', booking_list)
-    path('bookings/', booking_list)
+    path('bookings/', views.booking_list),
+    path('bookings/<int:id>/', views.booking_detail),
 ]

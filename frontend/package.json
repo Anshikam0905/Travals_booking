@@ -12,8 +12,11 @@
   "dependencies": {
     "axios": "^1.15.1",
     "bootstrap": "^5.3.8",
+    "framer-motion": "^12.38.0",
     "html2canvas": "^1.4.1",
+    "install": "^0.13.0",
     "jspdf": "^4.2.1",
+    "npm": "^11.12.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.14.1"

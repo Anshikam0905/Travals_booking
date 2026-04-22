@@ -8,7 +8,11 @@ const navigate = useNavigate();
 
 const travel = location.state || {};
 
-// ✅ passengers state FIXED
+// Auto Generate Transport ID
+const generateTransportId = () => {
+return "TR" + Math.floor(1000 + Math.random() * 9000);
+};
+
 const [passengers, setPassengers] = useState([
 { passenger_name: "", age: "" }
 ]);
@@ -16,16 +20,23 @@ const [passengers, setPassengers] = useState([
 const [formData, setFormData] = useState({
 name: "",
 email: "",
-from: travel?.from || "",
-to: travel?.to || "",
-type: travel?.type || "",
-price: travel?.price || "",
-date: travel?.date || "",
+
+from_location: travel?.from || "",
+to_location: travel?.to || "",
+
+transport_name: travel?.transport_name || "",
+transport_id: travel?.transport_id || generateTransportId(),
+
 departure_time: travel?.departure_time || "",
-arrival_time: travel?.arrival_time || ""
+arrival_time: travel?.arrival_time || "",
+
+payment_type: "",
+
+price: travel?.price || "",
+date: travel?.date || ""
 });
 
-// handle input
+
 const handleChange = (e) => {
 setFormData({
 ...formData,
@@ -33,14 +44,14 @@ setFormData({
 });
 };
 
-// passenger change
+
 const handlePassengerChange = (index, e) => {
 const updated = [...passengers];
 updated[index][e.target.name] = e.target.value;
 setPassengers(updated);
 };
 
-// add passenger
+
 const addPassenger = () => {
 setPassengers([
 ...passengers,
@@ -48,24 +59,15 @@ setPassengers([
 ]);
 };
 
-// submit booking
+
 const createBooking = () => {
 
+const totalPrice = formData.price * passengers.length;
+
 const bookingData = {
-name: formData.name,
-email: formData.email,
-
-from_location: formData.from,
-to_location: formData.to,
-
-departure_time: formData.departure_time,
-arrival_time: formData.arrival_time,
-
-price: formData.price,
-date: formData.date,
-
+...formData,
+price: totalPrice,
 total_passengers: passengers.length,
-
 passengers: passengers
 };
 
@@ -89,23 +91,25 @@ return (
 <div className="container py-5">
 
 <div className="row justify-content-center">
-<div className="col-lg-7">
+<div className="col-lg-8">
 
-<div className="card border-0 shadow-lg rounded-4 p-4">
+<div className="card shadow-lg border-0 rounded-4 p-4">
 
-<h3 className="text-center mb-4 fw-bold">
+<h3 className="text-center fw-bold mb-4">
 🎫 Confirm Booking
 </h3>
 
 {/* USER INFO */}
-<div className="row g-3 mb-3">
+<h5 className="mb-3">👤 User Details</h5>
+
+<div className="row g-3 mb-4">
 
 <div className="col-md-6">
 <input
 type="text"
 name="name"
 placeholder="Full Name"
-className="form-control form-control-lg"
+className="form-control"
 onChange={handleChange}
 />
 </div>
@@ -115,63 +119,99 @@ onChange={handleChange}
 type="email"
 name="email"
 placeholder="Email"
-className="form-control form-control-lg"
+className="form-control"
 onChange={handleChange}
 />
 </div>
 
 </div>
 
+
 {/* TRAVEL INFO */}
-<div className="p-3 bg-light rounded-3 mb-3">
+<h5 className="mb-3">🚆 Travel Details</h5>
+
+<div className="p-3 bg-light rounded mb-3">
 
 <div className="d-flex justify-content-between">
-<h6 className="fw-bold">{formData.from}</h6>
+<h6>{formData.from_location}</h6>
 <h6>→</h6>
-<h6 className="fw-bold">{formData.to}</h6>
+<h6>{formData.to_location}</h6>
 </div>
 
-<p className="text-muted mb-1">
+<p className="text-muted">
 🕒 {formData.departure_time} → {formData.arrival_time}
 </p>
 
-<p className="text-muted mb-0">
+<p className="text-muted">
 💰 ₹{formData.price}
 </p>
 
 </div>
 
-{/* DATE + PASSENGERS */}
+
+{/* TRANSPORT */}
+<h5 className="mb-3">🚍 Transport Details</h5>
+
 <div className="row g-3 mb-3">
 
 <div className="col-md-6">
 <input
-type="date"
-name="date"
-className="form-control form-control-lg"
-onChange={handleChange}
+type="text"
+name="transport_name"
+className="form-control"
+value={formData.transport_name}
+readOnly
 />
 </div>
 
 <div className="col-md-6">
 <input
-type="number"
-name="total_passengers"
-placeholder="Passengers"
-className="form-control form-control-lg"
-onChange={handleChange}
+type="text"
+name="transport_id"
+className="form-control"
+value={formData.transport_id}
+readOnly
 />
 </div>
 
 </div>
+
+
+{/* PAYMENT */}
+<div className="mb-3">
+<select
+name="payment_type"
+className="form-control"
+onChange={handleChange}
+>
+<option>Select Payment Type</option>
+<option>UPI</option>
+<option>Card</option>
+<option>Net Banking</option>
+<option>Cash</option>
+</select>
+</div>
+
+
+{/* DATE */}
+<div className="mb-3">
+<input
+type="date"
+name="date"
+className="form-control"
+// value={formData.date}
+onChange={handleChange}
+/>
+</div>
+
 
 {/* PASSENGERS */}
 <h5 className="fw-bold">👥 Passengers</h5>
 
 {passengers.map((p, index) => (
-<div key={index} className="card p-3 mb-2 shadow-sm border-0">
+<div key={index} className="card p-3 mb-2 shadow-sm">
 
-<div className="row g-2">
+<div className="row">
 
 <div className="col-md-8">
 <input
@@ -198,6 +238,7 @@ onChange={(e) => handlePassengerChange(index, e)}
 </div>
 ))}
 
+
 <button
 className="btn btn-outline-primary w-100 mb-3"
 onClick={addPassenger}
@@ -205,7 +246,9 @@ onClick={addPassenger}
 + Add Passenger
 </button>
 
-{/* SUBMIT */}
+<h5 className="text-success">
+Total Price : ₹{formData.price * passengers.length}
+</h5>
 <button
 className="btn btn-success w-100 fw-bold"
 onClick={createBooking}
@@ -221,6 +264,7 @@ Confirm Booking
 </div>
 
 );
+
 }
 
 export default Booking;
