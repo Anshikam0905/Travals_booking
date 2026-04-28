@@ -41,182 +41,272 @@ console.log(error);
 
 };
 
+const username = localStorage.getItem("username");
 
 return (
-
+    
 <div>
+{/* next line */}
+<div className="hero">
 
+<div className="hero-content">
+<h1>
+Welcome, {username} 👋</h1>
+<h1>Find Your Perfect Journey</h1>
+<p>Book Flights, Trains and Buses Easily</p>
 
+<div className="search-container">
 
-{/* Hero Section */}
+<input placeholder="From" />
+<input placeholder="To" />
+<input type="date" />
 
-<motion.div
-className="hero"
-initial={{ opacity: 0, y: -50 }}
-animate={{ opacity: 1, y: 0 }}
-transition={{ duration: 0.8 }}
->
-
-<h1>Book Your Journey</h1>
-<p>Flight • Train • Bus</p>
-
-<div className="search-box">
-
-<input
-name="from"
-placeholder="From"
-onChange={handleChange}
-/>
-
-<input
-name="to"
-placeholder="To"
-onChange={handleChange}
-/>
-
-<input
-type="date"
-name="date"
-onChange={handleChange}
-/>
-
-<select
-name="type"
-onChange={handleChange}
->
-
-<option value="Train">Train</option>
-<option value="Bus">Bus</option>
-<option value="Flight">Flight</option>
-
+<select>
+<option>Train</option>
+<option>Flight</option>
+<option>Bus</option>
 </select>
 
-<button onClick={handleSearch}>
-Search
-</button>
+<button>Search</button>
 
 </div>
 
-</motion.div>
+</div>
 
+</div>
+{/* next line */}
+{/* offer section */}
+<h2 className="section-title">Top Offers</h2>
 
+<div className="offers">
 
-{/* Popular Routes */}
+<div className="offer-card">
+<h3>20% OFF</h3>
+<p>Train Booking</p>
+</div>
 
-<h2 className="title">Popular Routes</h2>
+<div className="offer-card">
+<h3>Flat ₹500 OFF</h3>
+<p>Flight Booking</p>
+</div>
 
-<div className="cards">
+<div className="offer-card">
+<h3>15% Discount</h3>
+<p>Bus Tickets</p>
+</div>
 
-<motion.div
-className="card"
-whileHover={{ scale: 1.05 }}
-onClick={()=>navigate("/search")}
->
+</div>
+{/* offer section */}
+{/* popular routes */}
+
+<h2 className="section-title">Popular Routes</h2>
+
+<div className="routes">
+
+<div className="route-card">
 Lucknow → Delhi
-</motion.div>
+</div>
 
-<motion.div
-className="card"
-whileHover={{ scale: 1.05 }}
->
+<div className="route-card">
 Delhi → Mumbai
-</motion.div>
+</div>
 
-<motion.div
-className="card"
-whileHover={{ scale: 1.05 }}
->
+<div className="route-card">
 Jaipur → Delhi
-</motion.div>
+</div>
 
-<motion.div
-className="card"
-whileHover={{ scale: 1.05 }}
->
+<div className="route-card">
 Mumbai → Bangalore
-</motion.div>
-
 </div>
 
+</div>
+{/* popular routes */}
+{/* travel types */}
+<h2 className="section-title">Travel Types</h2>
 
+<div className="travel-types">
 
-{/* Travel Types */}
-
-<h2 className="title">Travel Types</h2>
-
-<div className="cards">
-
-<motion.div className="card" whileHover={{ scale: 1.05 }}>
-✈️ Flight
-</motion.div>
-
-<motion.div className="card" whileHover={{ scale: 1.05 }}>
-🚆 Train
-</motion.div>
-
-<motion.div className="card" whileHover={{ scale: 1.05 }}>
-🚌 Bus
-</motion.div>
-
+<div className="travel-card">
+✈️
+<h3>Flights</h3>
+<p>Fastest way to travel</p>
 </div>
 
+<div className="travel-card">
+🚆
+<h3>Train</h3>
+<p>Comfortable & Affordable</p>
+</div>
 
+<div className="travel-card">
+🚌
+<h3>Bus</h3>
+<p>Budget Friendly Travel</p>
+</div>
 
+</div>
+{/* travel types */}
+{/* why choose us */}
 {/* Why Choose Us */}
 
-<h2 className="title">Why Choose Us</h2>
+<h2 className="section-title">Why Choose Us</h2>
 
-<div className="cards">
+<div className="why-us">
 
-<div className="card">
-<h3>Best Price</h3>
-<p>Affordable travel options</p>
-</div>
-
-<div className="card">
+<div className="why-card">
+<div className="why-icon">🔒</div>
 <h3>Secure Booking</h3>
-<p>Safe and secure payment</p>
+<p>Your payment and data are completely secure</p>
 </div>
 
-<div className="card">
-<h3>Instant Ticket</h3>
-<p>Quick booking confirmation</p>
+<div className="why-card">
+<div className="why-icon">💰</div>
+<h3>Best Price</h3>
+<p>Get best deals on Flights, Trains & Buses</p>
 </div>
 
-<div className="card">
+<div className="why-card">
+<div className="why-icon">⚡</div>
+<h3>Instant Confirmation</h3>
+<p>Book tickets instantly without waiting</p>
+</div>
+
+<div className="why-card">
+<div className="why-icon">☎️</div>
 <h3>24/7 Support</h3>
-<p>Always available for help</p>
+<p>We are always here to help you</p>
 </div>
 
 </div>
+{/* why choose us */}
+{/* reviews */}
+{/* Customer Reviews */}
 
+<h2 className="section-title">Customer Reviews</h2>
 
+<div className="reviews">
 
+<div className="review-card">
+<div className="review-stars">⭐⭐⭐⭐⭐</div>
+<p>"Very smooth booking experience. Got best train price!"</p>
+<h4>- Rahul Sharma</h4>
+</div>
+
+<div className="review-card">
+<div className="review-stars">⭐⭐⭐⭐⭐</div>
+<p>"Easy to use and fast booking. Highly recommended."</p>
+<h4>- Priya Verma</h4>
+</div>
+
+<div className="review-card">
+<div className="review-stars">⭐⭐⭐⭐⭐</div>
+<p>"Booked flight in seconds. Amazing UI and offers."</p>
+<h4>- Aman Gupta</h4>
+</div>
+
+</div>
+{/* reviews */}
+{/* destination */}
+{/* Featured Destinations */}
+
+<h2 className="section-title">Featured Destinations</h2>
+
+<div className="destinations">
+
+<div className="destination-card">
+<img 
+src="https://images.unsplash.com/photo-1587474260584-136574528ed5"
+alt="Delhi"
+/>
+<div className="destination-info">
+<h3>Delhi</h3>
+<p>Explore historical monuments & street food</p>
+<button>Explore</button>
+</div>
+</div>
+
+<div className="destination-card">
+<img 
+src="https://images.unsplash.com/photo-1567157577867-05ccb1388e66"
+alt="Mumbai"
+/>
+<div className="destination-info">
+<h3>Mumbai</h3>
+<p>City of dreams & beautiful beaches</p>
+<button>Explore</button>
+</div>
+</div>
+
+<div className="destination-card">
+<img 
+src="https://images.unsplash.com/photo-1477587458883-47145ed94245"
+alt="Jaipur"
+/>
+<div className="destination-info">
+<h3>Jaipur</h3>
+<p>Royal palaces & heritage beauty</p>
+<button>Explore</button>
+</div>
+</div>
+
+<div className="destination-card">
+<img 
+src="https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?auto=format&fit=crop&w=800&q=80"
+alt="Bangalore"
+/>
+<div className="destination-info">
+<h3>Bangalore</h3>
+<p>Modern city & tech hub</p>
+<button>Explore</button>
+</div>
+</div>
+
+</div>
+{/* destination */}
+{/* footer */}
 {/* Footer */}
 
-<div className="footer">
+<footer className="footer">
+
+<div className="footer-container">
 
 <div>
-
-<h3>Travel Booking</h3>
-<p>Book Train, Bus, Flight Tickets Easily</p>
-
+<h4>TravelBooking</h4>
+<p>Book Flights</p>
+<p>Book Trains</p>
+<p>Book Buses</p>
 </div>
 
 <div>
+<h4>Company</h4>
+<p>About Us</p>
+<p>Contact</p>
+<p>Careers</p>
+</div>
 
-<p>© 2026 Travel Booking</p>
-<p>All Rights Reserved</p>
+<div>
+<h4>Support</h4>
+<p>Help Center</p>
+<p>Terms & Conditions</p>
+<p>Privacy Policy</p>
+</div>
 
+<div>
+<h4>Follow Us</h4>
+<p>Instagram</p>
+<p>Facebook</p>
+<p>Twitter</p>
 </div>
 
 </div>
 
-
+<div className="footer-bottom">
+© 2026 TravelBooking | All Rights Reserved
 </div>
 
+</footer>
+{/* footer */}
+</div>
 );
-
 }
-
 export default Home;
