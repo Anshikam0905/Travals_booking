@@ -62,30 +62,38 @@ setPassengers([
 
 const createBooking = () => {
 
-const totalPrice = formData.price * passengers.length;
+  if (!formData.payment_type) {
+    alert("Please select payment type");
+    return;
+  }
 
-const bookingData = {
-...formData,
-price: totalPrice,
-total_passengers: passengers.length,
-passengers: passengers
+  const token = localStorage.getItem("token");
+
+  const totalPrice = formData.price * passengers.length;
+
+  const bookingData = {
+    ...formData,
+    price: totalPrice,
+    total_passengers: passengers.length,
+    passengers: passengers
+  };
+
+  fetch("http://127.0.0.1:8000/api/bookings/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify(bookingData)
+  })
+
+  .then(res => res.json())
+  .then(data => {
+    console.log(data);
+    navigate("/mybookings");
+  });
+
 };
-
-fetch("http://127.0.0.1:8000/api/bookings/", {
-method: "POST",
-headers: {
-"Content-Type": "application/json"
-},
-body: JSON.stringify(bookingData)
-})
-.then(res => res.json())
-.then(data => {
-console.log(data);
-navigate("/mybookings");
-});
-
-};
-
 return (
 
 <div className="container py-5">

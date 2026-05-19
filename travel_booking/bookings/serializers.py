@@ -2,7 +2,6 @@ from rest_framework import serializers
 from .models import Booking, Passenger
 
 
-# Passenger Serializer
 class PassengerSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -12,11 +11,10 @@ class PassengerSerializer(serializers.ModelSerializer):
             "age",
             "seat_number"
         ]
+
         read_only_fields = ["seat_number"]
 
 
-
-# Booking Serializer
 class BookingSerializer(serializers.ModelSerializer):
 
     passengers = PassengerSerializer(many=True)
@@ -24,21 +22,17 @@ class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
         fields = "__all__"
-        read_only_fields = [
-            "booking_id",
-            "payment_id",
-            "transport_id",
-            "created_at"
-        ]
 
+        read_only_fields = ['user']
 
     def create(self, validated_data):
 
-        passengers_data = validated_data.pop("passengers")
+        passengers_data = validated_data.pop('passengers', [])
 
         booking = Booking.objects.create(**validated_data)
 
         for passenger in passengers_data:
+
             Passenger.objects.create(
                 booking=booking,
                 **passenger

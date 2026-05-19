@@ -7,37 +7,77 @@ function MyBookings() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
 
-    fetch("http://127.0.0.1:8000/api/bookings/", {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
+  const token = localStorage.getItem("token");
+
+  // If user not logged in
+  if (!token) {
+    navigate("/login");
+    return;
+  }
+
+  fetch("http://127.0.0.1:8000/api/bookings/", {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json"
+    }
+  })
+    .then(res => {
+
+      // If token invalid or expired
+      if (res.status === 401) {
+        localStorage.removeItem("token");
+        navigate("/login");
+        return null;
       }
+
+      return res.json();
     })
-      .then(res => res.json())
-      .then(data => {
+    .then(data => {
+
+      if (data) {
         console.log(data);
         setBookings(data);
-      });
+      }
 
-  }, []);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+
+}, [navigate]);
 
   const deleteBooking = (id) => {
 
-    const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
-    fetch(`http://127.0.0.1:8000/api/bookings/${id}/`, {
-      method: "DELETE",
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
-    .then(() => {
-      setBookings(bookings.filter(b => b.id !== id));
-    });
-  };
+  if (!token) {
+    navigate("/login");
+    return;
+  }
+
+  fetch(`http://127.0.0.1:8000/api/bookings/${id}/`, {
+    method: "DELETE",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+  .then(res => {
+
+    if (res.status === 401) {
+      localStorage.removeItem("token");
+      navigate("/login");
+      return;
+    }
+
+    setBookings(bookings.filter(b => b.id !== id));
+
+  })
+  .catch(error => {
+    console.log(error);
+  });
+};
 
   return (
     <div className="container py-4">
@@ -85,12 +125,7 @@ function MyBookings() {
                   View Details
                 </button>
 
-                <button
-                  className="btn btn-warning btn-sm me-2"
-                  onClick={() => navigate("/update-booking", { state: booking })}
-                >
-                  Update
-                </button>
+                
 
                 <button
                   className="btn btn-danger btn-sm"

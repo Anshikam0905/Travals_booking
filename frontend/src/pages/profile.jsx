@@ -37,9 +37,10 @@ function Profile() {
         </div>
 
         <div className="profile-actions">
-          <button onClick={() => navigate("/booking")}>
+          <button onClick={() => navigate("/mybookings")}>
             View Bookings
           </button>
+          
 
           <button className="logout" onClick={handleLogout}>
             Logout

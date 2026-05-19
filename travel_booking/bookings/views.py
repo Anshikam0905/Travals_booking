@@ -14,20 +14,25 @@ from rest_framework.decorators import permission_classes
 
 # GET All Bookings / POST Booking
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def booking_list(request):
 
-    # ✅ Only logged-in user's bookings
     if request.method == 'GET':
         bookings = Booking.objects.filter(user=request.user).order_by('-created_at')
         serializer = BookingSerializer(bookings, many=True)
         return Response(serializer.data)
 
     elif request.method == 'POST':
+
+        print(request.data)   # 🔥 DEBUG
+
         serializer = BookingSerializer(data=request.data)
 
         if serializer.is_valid():
-            serializer.save(user=request.user)  # 🔥 link booking to user
+            serializer.save(user=request.user)
             return Response(serializer.data, status=201)
+
+        print(serializer.errors)   # 🔥 DEBUG
 
         return Response(serializer.errors, status=400)
 # GET Single Booking / DELETE Booking
